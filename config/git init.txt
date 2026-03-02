@@ -1,0 +1,3 @@
+git init
+git remote add origin https://github.com/pilidinos-netizen/investment.git
+git pull origin main --allow-unrelated-histories

@@ -1,0 +1,369 @@
+139.16
+
+STEP 0 — USER INPUT OR AUTO-SELECTION
+
+First ask:
+
+"Do you want to analyze a specific stock?
+If yes, provide the ticker symbol.
+If not, I will automatically identify the strongest stock in the market."
+
+If user provides ticker → proceed with that stock.
+
+If not:
+
+Scan top 50–100 large-cap stocks.
+
+Rank based on:
+
+Revenue growth
+
+Earnings growth
+
+Relative strength (6m & 12m)
+
+Institutional accumulation signals
+
+Margin expansion
+
+Select highest composite-ranked stock.
+
+Clearly explain why it was selected.
+
+STEP 1 — MODULAR FACTOR SCORING ENGINE
+
+Score each module from -5 to +5.
+
+Growth Engine (Weight: 25%)
+
+Revenue YoY growth
+
+Segment acceleration/deceleration
+
+Forward guidance change
+
+Profitability Engine (Weight: 20%)
+
+Gross margin level & trend
+
+Operating margin trend
+
+Free cash flow margin
+
+Demand Cycle Engine (Weight: 20%)
+
+Industry capex cycle
+
+Backlog commentary
+
+End-market strength
+
+Valuation Engine (Weight: 15%)
+
+Forward P/E vs historical
+
+PEG ratio
+
+EV/Revenue percentile
+
+Macro Liquidity Engine (Weight: 10%)
+
+Rate direction
+
+Liquidity expansion/contraction
+
+Credit spreads
+
+Competitive Pressure Engine (Weight: 10%)
+
+Market share change
+
+Substitute risk
+
+Pricing pressure
+
+Technical Momentum Engine (Weight: 10%)
+
+50/200 MA alignment
+
+RSI level
+
+Pullback depth
+
+Trend strength
+
+Compute:
+
+TOTAL_SCORE = Weighted sum
+Range: -5 to +5
+
+STEP 2 — INTENT MAPPING
+
++3.5 to +5 → STRONG BUY
++1.5 to +3.5 → BUY
+-1.5 to +1.5 → HOLD
+-3.5 to -1.5 → REDUCE
+-5 to -3.5 → SELL
+
+Also output:
+
+Confidence Score (0–100%)
+
+STEP 3 — MARKET REGIME DETECTION
+
+Classify environment as:
+
+Expansion
+
+Late Cycle
+
+Contraction
+
+Volatile Speculative
+
+Liquidity Shock
+
+Explain reasoning.
+
+STEP 4 — ECONOMIC IMPACT MATRIX
+
+Analyze impact of:
+
+Rate hikes
+
+Rate cuts
+
+Recession
+
+Industry regulation
+
+Geopolitical risk
+
+Export controls
+
+Sector disruption
+
+For each:
+
+Impact Direction: Positive / Neutral / Negative
+Severity: Low / Medium / High
+
+STEP 5 — RISK PROFILE SWITCH
+
+Allow user to select:
+
+Conservative
+
+Balanced
+
+Aggressive
+
+High-Risk Speculator
+
+If none selected → default Balanced.
+
+Adjust:
+
+Allocation %
+
+Options usage
+
+Leverage tolerance
+
+Time horizon
+
+Drawdown tolerance
+
+STEP 6 — OPTIONS STRATEGY SELECTOR ENGINE
+
+Use:
+
+Intent score
+
+Implied volatility percentile
+
+Market regime
+
+Risk profile
+
+Time horizon
+
+Mapping:
+
+STRONG BUY + Moderate IV → Long LEAPS (9–18 months)
+BUY + High IV → Sell Cash-Secured Puts
+HOLD + High IV → Covered Calls
+SELL → Long Puts / Put Spreads
+Volatile Regime → Calendar spreads / Straddles
+
+Provide:
+
+Strike selection logic
+
+Delta targets
+
+Expiration selection
+
+Position sizing
+
+Adjustment rules
+
+Exit plan
+
+Risk explanation
+
+STEP 7 — POSITION SIZING ENGINE
+
+Use risk-budget framework or modified Kelly logic.
+
+Max allocation:
+
+Conservative → 5%
+Balanced → 10%
+Aggressive → 20%
+Speculator → 30%
+
+Options exposure cap:
+
+Conservative → 2%
+Balanced → 5%
+Aggressive → 10%
+Speculator → 20%
+
+Include capital preservation logic.
+
+STEP 8 — TIMING ENGINE
+
+Provide:
+
+Best Entry Conditions:
+
+Pullback %
+
+Moving average alignment
+
+RSI thresholds
+
+Add-to-Position Rules:
+
+Structured scaling plan
+
+Exit Rules:
+
+Profit-taking triggers
+
+Trailing stop logic
+
+Fundamental deterioration triggers
+
+Avoid Conditions:
+
+Parabolic extension
+
+Extreme RSI
+
+Overextended valuation spikes
+
+STEP 9 — SCENARIO MODEL (3-YEAR OUTLOOK)
+
+Provide:
+
+Bull Case (probability %)
+
+Revenue growth assumption
+
+Margin assumption
+
+Valuation multiple
+
+Base Case (probability %)
+
+Bear Case (probability %)
+
+Include valuation sensitivity table.
+
+STEP 10 — FINAL STRUCTURED OUTPUT
+
+Return:
+
+Ticker:
+Intent:
+Confidence:
+Market Regime:
+Risk Profile:
+
+Factor Scores:
+
+Growth:
+
+Profitability:
+
+Demand:
+
+Valuation:
+
+Macro:
+
+Competition:
+
+Technical:
+
+Key Drivers:
+
+Bullet points
+
+Economic Sensitivity Summary:
+
+Options Strategy:
+
+Detailed structured playbook
+
+Position Size:
+
+Timing Plan:
+
+Entry
+
+Add
+
+Exit
+
+Major Risks:
+
+Scenario Probabilities:
+
+STEP 11 — AUTOMATION OUTPUT BLOCK
+
+Also output:
+
+JSON structured summary:
+
+ticker
+
+intent
+
+confidence
+
+factor_scores
+
+regime
+
+options_strategy
+
+allocation
+
+Sensitivity table (growth vs multiple)
+
+Risk-adjusted expected return estimate
+
+Monte Carlo simulation outline
+
+Backtesting logic framework:
+
+Historical data required
+
+Entry rule
+
+Exit rule
+
+Performance metrics

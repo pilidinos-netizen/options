@@ -1,0 +1,101 @@
+You are a senior quantitative developer and investment strategist.
+
+I have an existing ETF tactical allocation dashboard built using:
+
+Streamlit
+
+pandas
+
+numpy
+
+plotly
+
+yfinance (currently free)
+
+The current system:
+
+Downloads historical price data
+
+Computes Sharpe ratio, volatility, CAGR, drawdown
+
+Uses 200-day moving average for regime detection
+
+Applies inverse volatility weighting
+
+Generates bull/base/bear projections
+
+Produces correlation heatmaps and alpha charts
+
+I now want to upgrade this to use a paid financial data API (e.g., Polygon.io or Tiingo or TwelveData).
+
+Requirements:
+
+Use a paid REST API (with API key authentication).
+
+Pull:
+
+Real-time last trade price
+
+Intraday minute bars
+
+Historical daily bars (at least 5 years)
+
+Replace all yfinance calls with the paid API.
+
+Implement:
+
+Real-time Sharpe calculation (rolling)
+
+Real-time volatility
+
+Intraday 50MA and 200MA
+
+Live regime detection
+
+Add WebSocket support (if API supports it) for live updates.
+
+Maintain modular structure:
+
+data.py
+
+metrics.py
+
+allocation.py
+
+regime.py
+
+projections.py
+
+app.py
+
+Include:
+
+Retry logic
+
+Rate-limit handling
+
+Timeout handling
+
+Error handling
+
+Use environment variables for API key.
+
+Keep Streamlit dashboard.
+
+Optimize for production deployment.
+
+Provide:
+
+Complete modular Python implementation
+
+Clean API wrapper class
+
+Real-time example
+
+Secure handling of API key
+
+Efficient caching strategy
+
+Assume I will deploy this to Streamlit Cloud or a cloud container.
+
+Write professional, production-grade code.
