@@ -7,3 +7,4 @@ matplotlib
 praw 
 textblob
 feedparser
+vaderSentiment
