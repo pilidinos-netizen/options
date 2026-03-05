@@ -19,6 +19,7 @@ from engines.options_opportunity_engine import rank_option_opportunities
 from engines.options_contract_engine import select_leaps_contract
 from engines.options_payoff_engine import calculate_call_payoff
 from engines.news_engine import get_market_news
+from engines.social_sentiment_engine import run_market_sentiment_engine
 
 
 DEFAULT_UNIVERSE = [
@@ -26,6 +27,9 @@ DEFAULT_UNIVERSE = [
     "META","TSLA","AMD","NFLX","JPM"
 ]
 
+@st.cache_data(ttl=600)
+def load_reddit_sentiment():
+    return run_market_sentiment_engine()
 st.set_page_config(layout="wide")
 st.title("📊 Intelligent Investment Research Platform")
 
@@ -302,3 +306,148 @@ with tab5:
                     st.write(f"Detected Announcement: {', '.join(article['Announcements'])}")
                 st.markdown(f"[Read Article]({article['Link']})")
                 st.markdown("---")
+with tab6:
+
+    st.header("📊 Reddit Retail Sentiment Engine")
+
+    st.caption("Analyzing Reddit discussions across investing communities")
+
+
+    # Refresh button
+    if st.button("🔄 Refresh Sentiment Data"):
+        st.cache_data.clear()
+
+
+    # Load data
+    data = load_reddit_sentiment()
+
+
+    # --------------------------------
+    # Overall Market Sentiment
+    # --------------------------------
+    st.subheader("Overall Market Sentiment")
+
+    sentiment_score = data.get("Market Sentiment Score", 0)
+
+    if sentiment_score > 0.05:
+        sentiment_label = "Bullish"
+        st.success(f"Market Sentiment: {sentiment_label} ({sentiment_score})")
+
+    elif sentiment_score < -0.05:
+        sentiment_label = "Bearish"
+        st.error(f"Market Sentiment: {sentiment_label} ({sentiment_score})")
+
+    else:
+        sentiment_label = "Neutral"
+        st.warning(f"Market Sentiment: {sentiment_label} ({sentiment_score})")
+
+
+    # --------------------------------
+    # Ticker Sentiment Table
+    # --------------------------------
+    st.subheader("Ticker Sentiment Table")
+
+    ticker_table = data.get("Ticker Sentiment Table", [])
+
+    if ticker_table:
+
+        df = pd.DataFrame(ticker_table)
+
+        df.columns = [
+            "Ticker",
+            "Mentions",
+            "Sentiment Score",
+            "Sentiment"
+        ]
+
+
+        # Color formatting
+        def color_sentiment(val):
+
+            if val == "bullish":
+                return "color: green"
+
+            if val == "bearish":
+                return "color: red"
+
+            return "color: gray"
+
+
+        styled_df = df.style.applymap(
+            color_sentiment,
+            subset=["Sentiment"]
+        )
+
+        st.dataframe(
+            styled_df,
+            use_container_width=True
+        )
+
+    else:
+        st.info("No ticker sentiment detected.")
+
+
+    # --------------------------------
+    # Top Discussed Tickers
+    # --------------------------------
+    st.subheader("🔥 Most Discussed Tickers")
+
+    top_tickers = data.get("Top Tickers", [])
+
+    if top_tickers:
+
+        top_df = pd.DataFrame(
+            top_tickers,
+            columns=["Ticker", "Mentions"]
+        )
+
+        st.dataframe(
+            top_df,
+            use_container_width=True
+        )
+
+    else:
+        st.info("No ticker discussion detected.")
+
+
+    # --------------------------------
+    # Top Keywords
+    # --------------------------------
+    st.subheader("📊 Trending Market Themes")
+
+    top_keywords = data.get("Top Keywords", [])
+
+    if top_keywords:
+
+        kw_df = pd.DataFrame(
+            top_keywords,
+            columns=["Keyword", "Mentions"]
+        )
+
+        st.dataframe(
+            kw_df,
+            use_container_width=True
+        )
+
+    else:
+        st.info("No market themes detected.")
+
+
+    # --------------------------------
+    # Sample Posts
+    # --------------------------------
+    st.subheader("📰 Sample Market Posts")
+
+    posts = data.get("Sample Posts", [])
+
+    for post in posts:
+
+        st.markdown(f"**{post['title']}**")
+
+        st.write(f"Tickers: {', '.join(post['tickers']) if post['tickers'] else 'None'}")
+
+        st.write(f"Keywords: {', '.join(post['keywords']) if post['keywords'] else 'None'}")
+
+        st.write(f"Sentiment: {post['label']} ({post['sentiment']})")
+
+        st.divider()
