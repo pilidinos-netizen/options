@@ -35,7 +35,7 @@ st.set_page_config(
     page_title="Quant Research Platform",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -43,16 +43,23 @@ st.set_page_config(
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-/* Tabs */
-.stTabs [data-baseweb="tab-list"] { gap: 4px; }
+/* ── Tabs ─────────────────────────────────────────────────────────────────── */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.stTabs [data-baseweb="tab-list"]::-webkit-scrollbar { display: none; }
 .stTabs [data-baseweb="tab"] {
     padding: 10px 22px;
     font-size: 14px;
     font-weight: 500;
     border-radius: 6px 6px 0 0;
+    white-space: nowrap;
 }
 
-/* Metric cards */
+/* ── Metric cards ─────────────────────────────────────────────────────────── */
 [data-testid="stMetric"] {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.09);
@@ -62,20 +69,22 @@ st.markdown("""
 [data-testid="stMetricLabel"] { font-size: 12px; opacity: 0.70; }
 [data-testid="stMetricValue"] { font-size: 20px; font-weight: 700; }
 
-/* Primary buttons */
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
 .stButton > button[kind="primary"] {
     border-radius: 8px;
     font-weight: 600;
     padding: 10px 26px;
+    min-height: 44px;
 }
 .stButton > button {
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.15s;
+    min-height: 44px;
 }
 .stButton > button:hover { transform: translateY(-1px); }
 
-/* Sidebar */
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
 [data-testid="stSidebar"] { background: #0e1117; }
 [data-testid="stSidebar"] * { color: #e8eaf0 !important; }
 [data-testid="stSidebar"] .stSelectbox label { color: #c8ccd8 !important; }
@@ -86,17 +95,97 @@ st.markdown("""
 [data-testid="stSidebar"] .stCaption { color: #a0a8b8 !important; }
 [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.15) !important; }
 
-/* Dataframe */
-.stDataFrame { font-size: 13px; }
+/* ── Dataframe ────────────────────────────────────────────────────────────── */
+.stDataFrame { font-size: 13px; overflow-x: auto; }
 
-/* Alerts */
+/* ── Alerts / dividers / expanders ───────────────────────────────────────── */
 .stAlert { border-radius: 8px; }
-
-/* Divider */
 hr { border-color: rgba(255,255,255,0.08) !important; }
-
-/* Expander header */
 .streamlit-expanderHeader { font-weight: 600; }
+
+/* ── Touch-friendly select / input ───────────────────────────────────────── */
+input, select, textarea { font-size: 16px !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* TABLET  (≤ 900 px) — wrap columns 2-per-row                              */
+/* ══════════════════════════════════════════════════════════════════════════ */
+@media screen and (max-width: 900px) {
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+        gap: 4px 0 !important;
+    }
+    [data-testid="column"] {
+        min-width: 47% !important;
+        flex: 1 1 47% !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* PHONE  (≤ 640 px) — full-width single column stack                       */
+/* ══════════════════════════════════════════════════════════════════════════ */
+@media screen and (max-width: 640px) {
+    /* Single-column layout */
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+        gap: 0 !important;
+    }
+    [data-testid="column"] {
+        min-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    /* Main container padding */
+    .block-container {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        padding-top: 0.5rem !important;
+    }
+
+    /* Tabs — horizontal scroll strip */
+    .stTabs [data-baseweb="tab"] {
+        padding: 7px 10px !important;
+        font-size: 11px !important;
+    }
+
+    /* Metric cards */
+    [data-testid="stMetricValue"] { font-size: 16px !important; }
+    [data-testid="stMetricLabel"] { font-size: 10px !important; }
+
+    /* Logo banner — stack vertically */
+    .logo-banner {
+        flex-direction: column !important;
+        padding: 16px 18px !important;
+        gap: 12px !important;
+        align-items: flex-start !important;
+    }
+    .logo-banner .logo-title { font-size: 18px !important; }
+    .logo-banner .logo-sub   { font-size: 11px !important; }
+
+    /* Intent banner */
+    .intent-banner {
+        font-size: 16px !important;
+        padding: 12px 16px !important;
+    }
+
+    /* Buttons — full width */
+    .stButton > button { width: 100% !important; }
+
+    /* Dataframe — horizontal scroll */
+    .stDataFrame > div { overflow-x: auto !important; }
+
+    /* Download button full width */
+    [data-testid="stDownloadButton"] > button { width: 100% !important; }
+
+    /* Expander header padding */
+    .streamlit-expanderHeader { padding: 10px 12px !important; }
+
+    /* Sidebar toggle bigger tap target */
+    [data-testid="collapsedControl"] { padding: 12px !important; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -254,7 +343,7 @@ def _intent_banner(ticker, intent):
     bg, fg = INTENT_COLORS.get(intent, ("#444", "white"))
     icon = INTENT_ICONS.get(intent, "")
     st.markdown(
-        f'<div style="background:{bg};color:{fg};padding:16px 24px;border-radius:10px;'
+        f'<div class="intent-banner" style="background:{bg};color:{fg};padding:16px 24px;border-radius:10px;'
         f'font-size:20px;font-weight:700;margin:12px 0;text-align:center;">'
         f'{icon} {ticker.upper()} — {intent}'
         f'</div>',
@@ -343,7 +432,7 @@ with st.sidebar:
 # Page header — logo banner
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
-<div style="
+<div class="logo-banner" style="
     background: linear-gradient(135deg, #0a0e1a 0%, #0d1f3c 50%, #0a1628 100%);
     border: 1px solid rgba(56,189,248,0.18);
     border-radius: 16px;
@@ -409,7 +498,7 @@ st.markdown("""
 
 <!-- Text block -->
 <div style="flex:1;">
-  <div style="
+  <div class="logo-title" style="
       font-size: 26px;
       font-weight: 800;
       letter-spacing: -0.3px;
@@ -419,7 +508,7 @@ st.markdown("""
       -webkit-text-fill-color: transparent;
       background-clip: text;
   ">Intelligent Investment Research Platform</div>
-  <div style="
+  <div class="logo-sub" style="
       margin-top: 7px;
       font-size: 13px;
       color: rgba(180,210,240,0.75);
@@ -477,6 +566,64 @@ with tab1:
         "Full 12-stage quant pipeline: fundamentals → factor scoring → intent → "
         "regime detection → risk management → Monte Carlo"
     )
+
+    with st.expander("🎓 New Here? What This Tab Does & Why It Matters", expanded=False):
+        st.markdown("""
+        ### What is this tab for?
+        Think of this tab as hiring a **professional stock analyst** for any company you're
+        curious about — except it runs in seconds and is completely data-driven.
+
+        You type in a stock ticker (like `AAPL` for Apple or `TSLA` for Tesla), choose how
+        much risk you're comfortable with, and the platform runs a **12-step analysis** that
+        professional quant funds use. Here's what happens under the hood — in plain English:
+
+        ---
+
+        #### Step 1 — Fetching the Company's Financial Report Card
+        The platform pulls the company's real financial data: How fast is revenue growing?
+        Are they profitable? Do they carry too much debt? This is like reading a company's
+        annual report, but the computer does it instantly.
+
+        #### Step 2 — Scoring 6 Key Factors
+        Every company gets scored on 6 dimensions (like a school report card):
+        - 📈 **Growth** — Is the business expanding? Revenue growing year-over-year?
+        - 💰 **Profitability** — Do they actually make money after all expenses?
+        - ⚙️ **Efficiency** — How well do they convert assets into profit?
+        - 🏦 **Leverage** — How much debt do they carry? Too much debt = higher risk.
+        - 💎 **ROE (Return on Equity)** — How much profit do they generate per dollar invested?
+        - 🏷️ **Valuation** — Is the stock price reasonable compared to earnings (P/E ratio)?
+
+        #### Step 3 — Detecting the Market Regime
+        Is the broader market trending up (Bullish), going sideways (Neutral), or falling
+        (Bearish)? This context shapes the recommendation.
+
+        #### Step 4 — Classifying Intent
+        Based on all scores and your risk tolerance, the model outputs a clear signal:
+        **STRONG BUY / BUY / HOLD / REDUCE / SELL**.
+
+        #### Step 5 — Risk Management
+        The platform calculates how volatile (jumpy) the stock is and adjusts the
+        suggested position size accordingly. High volatility = smaller position = less risk.
+
+        #### Step 6 — Monte Carlo Simulation
+        Runs 1,000 different simulated futures for the stock price over 1 year using
+        historical patterns. The result is the **average projected price** — not a guarantee,
+        but a probability-weighted estimate.
+
+        ---
+
+        ### How to use it
+        1. Type a stock ticker in the box (e.g. `NVDA`, `MSFT`, `JPM`)
+        2. Select your **Risk Profile** — Conservative if you want safety, Speculator if you
+           want aggressive signals
+        3. Click **Run Full Analysis**
+        4. Read the intent banner (green = buy signal, red = sell signal)
+        5. Scroll down to see the factor breakdown and full reasoning
+
+        > 💡 **Tip:** Start with a company you already know — like `AAPL` (Apple) or
+        > `AMZN` (Amazon) — so you can compare the model's output to what you already
+        > know about the company.
+        """)
 
     with st.expander("📘 Glossary — What All These Terms Mean"):
         st.markdown("""
@@ -635,6 +782,72 @@ with tab2:
         "Parallel scan across your selected universe with full factor scoring, "
         "momentum, RSI, fundamentals, and risk analysis"
     )
+
+    with st.expander("🎓 New Here? What This Tab Does & Why It Matters", expanded=False):
+        st.markdown("""
+        ### What is this tab for?
+        Instead of analysing one stock at a time, this tab scans **an entire group of stocks
+        simultaneously** — like having 100 analysts working in parallel — and ranks them all
+        so you can instantly spot the best opportunities.
+
+        This is how professional portfolio managers and quant hedge funds decide **where to
+        focus their attention** across the market each day.
+
+        ---
+
+        ### What can you scan?
+        Choose from pre-built universes or build your own:
+        - **S&P 100** — America's 100 largest companies (Apple, Microsoft, ExxonMobil, etc.)
+        - **NASDAQ 100** — Top 100 tech-heavy stocks (NVIDIA, Google, Meta, Tesla, etc.)
+        - **Broad Market** — Combined S&P 100 + NASDAQ 100 (~170 unique stocks)
+        - **Sector** — Focus on one industry (e.g. only Energy or only Technology)
+        - **Custom** — Type in your own list of tickers
+
+        ### What does "Pre-screen" mean?
+        Before running the expensive full analysis on every stock, the platform quickly
+        filters out stocks that are too small or trade too little. This saves time and
+        focuses the analysis on stocks you can actually trade.
+
+        ---
+
+        ### What do the results tell you?
+
+        #### 📋 Signal & Risk tab
+        The main dashboard — shows every stock's **buy/sell signal, confidence score,
+        volatility, and recommended options strategy** at a glance.
+
+        #### 💰 Fundamentals tab
+        The financial report card for every stock: revenue growth, profit margins, P/E ratio
+        (is the stock expensive?), and return on equity. Lets you spot companies with strong
+        business fundamentals vs. hype-driven stocks.
+
+        #### 📈 Momentum tab
+        Shows recent **price performance** (1-month, 3-month, 6-month returns) and RSI.
+        RSI (Relative Strength Index) tells you if a stock is *overbought* (>70, might fall)
+        or *oversold* (<30, might recover). Great for timing.
+
+        #### 🔬 Factor Heatmap tab
+        A colour-coded grid showing how each stock scores on all 6 factors.
+        **Dark green = strong, dark red = weak.** Lets you see patterns across the whole
+        market instantly — e.g. if the Energy sector is uniformly green on Profitability.
+
+        #### 🏭 Sector Breakdown tab
+        Groups the results by industry sector and shows the **average quant score per sector**.
+        Useful for spotting which industries the model is most bullish on right now.
+
+        ---
+
+        ### How to use it
+        1. Select **Risk Profile** and **Universe** (start with S&P 100 or NASDAQ 100)
+        2. Set **Top N** to 30 — a good balance of breadth vs. speed
+        3. Click **Run Market Scan** and wait for the parallel scan to complete
+        4. Look at the pie chart first — if most stocks are green (BUY/STRONG BUY), the
+           market is in good shape. If most are red, be cautious.
+        5. Click into the inner tabs to drill into fundamentals, momentum, or factor details
+
+        > 💡 **Tip:** Use the **CSV download button** to export results into Excel for
+        > further analysis or to keep a record of the market snapshot over time.
+        """)
 
     snap_profile = st.selectbox(
         "Risk Profile",
@@ -853,6 +1066,66 @@ with tab3:
         "Annualised return, volatility, Sharpe ratio, and max drawdown computed from 1-year price history"
     )
 
+    with st.expander("🎓 New Here? What This Tab Does & Why It Matters", expanded=False):
+        st.markdown("""
+        ### What is this tab for?
+        This tab answers the question: **"How has this stock actually performed?"**
+
+        While Tab 1 tells you what to *expect* in the future, this tab shows you what
+        *already happened* — using real historical price data. It's like checking a fund
+        manager's track record before trusting their future recommendations.
+
+        ---
+
+        ### The 5 metrics explained in plain English
+
+        #### 📊 Total Return (%)
+        The simple answer: if you had bought this stock 1 year ago and held it, how much
+        money would you have made (or lost)? e.g. +45% means a $10,000 investment is now
+        worth $14,500.
+
+        #### 📅 Annual Return (%)
+        The return expressed as a yearly percentage, adjusted for compounding.
+        This makes it easy to compare stocks held for different time periods.
+
+        #### 🌊 Annual Volatility (%)
+        How "bumpy" was the ride? A stock with 60% volatility swings wildly — great if it
+        goes up, terrifying if it drops. A stock with 15% volatility is much smoother.
+        Lower volatility = better sleep at night.
+
+        #### ⚖️ Sharpe Ratio
+        This is the **most important metric** on this page. It measures how much return
+        you got *per unit of risk taken*. Think of it as "bang for your buck":
+        - **> 2.0** → Excellent — high return for the risk
+        - **1.0 – 2.0** → Good
+        - **0 – 1.0** → Mediocre — you're taking risk but not being well compensated
+        - **< 0** → Poor — you'd have been better off in cash
+
+        The **top 3 Sharpe ratio stocks are highlighted in green** in the comparison table.
+
+        #### 📉 Max Drawdown (%)
+        The worst-case loss from peak to trough during the period. A -40% drawdown means
+        the stock fell 40% from its high point before recovering. This tells you the worst
+        pain you would have experienced as a holder.
+
+        ---
+
+        ### Single Stock vs. Compare Universe
+
+        **📌 Single Stock** — Deep-dive on one company's historical performance. Great for
+        due diligence before investing.
+
+        **🔄 Compare Universe** — Scan an entire group of stocks and rank them by Sharpe
+        Ratio. The bar chart makes it immediately obvious which stocks gave the best
+        risk-adjusted returns. Use this to build a shortlist of historically strong performers.
+
+        ---
+
+        > 💡 **Tip:** A stock can have a great Sharpe Ratio historically but a weak quant
+        > score in Tab 1 — that means its best days may be behind it. Ideally you want
+        > both: strong past performance AND a positive forward-looking signal.
+        """)
+
     perf_t1, perf_t2 = st.tabs(["📌 Single Stock", "🔄 Compare Universe"])
 
     # ── Single Stock ──────────────────────────────────────────────────────────
@@ -994,6 +1267,71 @@ with tab4:
     st.caption(
         "Market-wide opportunity scanner · LEAPS contract generator · Interactive payoff diagrams"
     )
+
+    with st.expander("🎓 New Here? What Options Are & Why This Tab Matters", expanded=False):
+        st.markdown("""
+        ### What is an option? (Plain English)
+        An **option** is a contract that gives you the *right* (but not the obligation) to
+        buy or sell a stock at a **set price** on or before a **set date**.
+
+        **Example:** Apple is trading at $200. You buy a **Call Option** with a strike of
+        $210 expiring in 3 months for a premium (cost) of $5 per share. If Apple rises to
+        $230, your option is now worth $20 — a **4× return** on just $5 invested.
+        If Apple stays below $210, you lose your $5 premium. That's your *maximum loss*.
+
+        Options let you **control more stock with less money** — but they also expire
+        worthless if wrong, so strategy and timing matter enormously.
+
+        ---
+
+        ### Why use options instead of just buying stock?
+        | | Buying Stock | Buying an Option |
+        |--|--|--|
+        | **Capital required** | Full share price | Small premium (5-15% of stock price) |
+        | **Max loss** | Full investment | Just the premium paid |
+        | **Max gain** | Unlimited | Unlimited (calls) |
+        | **Time pressure** | Hold forever | Must be right before expiry |
+
+        ---
+
+        ### What does this tab do?
+
+        #### 🏆 Top Marketplace Opportunities
+        Scans a universe of stocks and finds the **10 best options setups** right now —
+        ranked by a score combining: model confidence, how cheap/expensive the option
+        premium is (implied volatility), liquidity (how easily you can trade it), and
+        alignment with the current market regime.
+
+        Think of it like a **job board for options trades** — surfacing the setups with
+        the best risk/reward based on all available data.
+
+        #### 📃 LEAPS Generator
+        **LEAPS** (Long-term Equity Anticipation Securities) are options with expiry dates
+        **10+ months in the future**. They behave more like owning stock but cost far less.
+        Many professional investors use LEAPS as a stock substitute.
+
+        The generator finds the optimal LEAPS call contract for any stock and shows:
+        - **Strike price** — the price at which you can buy the stock
+        - **Premium** — what you pay today for the contract
+        - **Break-even** — what price the stock must reach for you to profit
+        - **Greeks** — Delta (how much the option moves per $1 stock move), Theta
+          (daily time decay cost), Vega (sensitivity to volatility changes)
+        - **Interactive P&L chart** — shows your profit/loss at every possible stock price
+          at expiration. Hover over it to see exact numbers.
+
+        ---
+
+        ### Risk Profiles & Options Strategy
+        The platform recommends different strategies based on your risk tolerance:
+        - **Conservative** → Sell Cash-Secured Puts (income-generating, limited downside)
+        - **Balanced** → Bull Call Spreads (defined risk, moderate upside)
+        - **Aggressive** → Buy LEAPS Calls (larger upside, time decay risk)
+        - **Speculator** → Buy OTM Calls (lottery-ticket style, high risk/high reward)
+
+        > ⚠️ **Warning for beginners:** Options are powerful but complex. Start by reading
+        > the P&L chart for a LEAPS contract to understand how profit and loss work before
+        > trading real money.
+        """)
 
     with st.expander("📘 How Options Opportunities Are Scored"):
         st.markdown("""
@@ -1159,6 +1497,62 @@ with tab5:
     st.subheader("Market News & Impact Analysis")
     st.caption("Company-specific news, VADER sentiment scoring, and ecosystem mapping")
 
+    with st.expander("🎓 New Here? What This Tab Does & Why It Matters", expanded=False):
+        st.markdown("""
+        ### What is this tab for?
+        News moves stock prices. This tab automatically **reads, analyses, and scores** the
+        latest news about any company you search for — so you don't have to manually sift
+        through hundreds of articles.
+
+        It uses **VADER** (Valence Aware Dictionary and sEntiment Reasoner), an AI model
+        originally developed at Georgia Tech, to assign a sentiment score to every article.
+        This is the same class of technology used by hedge funds for news-driven trading.
+
+        ---
+
+        ### What does it show?
+
+        #### 🟢🔴 Sentiment Banner
+        The first thing you see after fetching news is the overall **verdict** on recent
+        news: Bullish (positive for the stock), Bearish (negative), or Neutral.
+        The score ranges from -1.0 (extremely negative) to +1.0 (extremely positive).
+
+        #### 🏢 Company Ecosystem
+        Shows the company's **industry, competitors, and key suppliers**. This is useful
+        because:
+        - If a supplier has bad news (e.g. a chip shortage), it affects the company too
+        - If a competitor reports bad earnings, it might be good for this company
+        - Ecosystem awareness helps you understand second-order effects
+
+        #### 📋 Summary
+        A plain-English summary of the most important themes in recent news — so you
+        can get the key points without reading every article.
+
+        #### 📢 Financial Announcements
+        Highlights specific events detected in the news: earnings reports, dividend
+        announcements, product launches, mergers, regulatory filings, etc. These are
+        the events that typically cause the biggest short-term price moves.
+
+        #### 📰 Articles
+        The individual news articles, each in a collapsible card. Click any article to
+        see the source, publication date, and link to the full story. Announcements
+        detected in each article are flagged automatically.
+
+        ---
+
+        ### How to use it
+        1. Type a ticker (e.g. `NVDA`, `TSLA`, `AMZN`)
+        2. Click **Fetch News**
+        3. Check the **sentiment banner** first — is the news tone positive or negative?
+        4. Read the **Financial Announcements** section — any earnings, guidance, or
+           M&A news could be a catalyst for a price move
+        5. Cross-reference with Tab 1: if news is Bullish AND the quant model says
+           STRONG BUY, that's a stronger combined signal
+
+        > 💡 **Tip:** Run this tab the night before or morning of any planned trade.
+        > News sentiment often leads price movement by hours or days.
+        """)
+
     nc1, nc2 = st.columns([3, 1])
     with nc1:
         news_ticker = st.text_input(
@@ -1245,6 +1639,88 @@ with tab6:
 
     st.subheader("Market Sentiment Dashboard")
     st.caption("Financial news sources + Reddit retail sentiment — powered by VADER NLP")
+
+    with st.expander("🎓 New Here? What This Tab Does & Why It Matters", expanded=False):
+        st.markdown("""
+        ### What is this tab for?
+        Markets are driven by two forces: **data** (fundamentals, covered in Tabs 1-4)
+        and **emotion** (fear, greed, hype, panic — covered here).
+
+        This tab measures the **emotional temperature of the market** from two very
+        different sources: professional financial media and retail investor communities.
+        Together they give you a 360° view of current market sentiment.
+
+        ---
+
+        ### 📡 Financial News Sentiment — What It Does
+
+        Simultaneously reads **12 major financial news sources** in parallel:
+        CNBC · MarketWatch · Yahoo Finance · Reuters · Bloomberg · CNN Business ·
+        Google Finance · Barron's · Seeking Alpha · Morningstar · Investopedia · FT
+
+        For each article, VADER AI assigns a sentiment score from -1.0 to +1.0.
+        These scores are then aggregated to give you:
+
+        **Overall Market Tone** — Is the professional financial press bullish or bearish
+        about the market right now? This often leads market moves by 24-48 hours.
+
+        **Per-Source Breakdown** — Do all sources agree? Or is Bloomberg bearish while
+        CNBC is bullish? Disagreement between sources signals uncertainty.
+
+        **Macro Theme Analysis** — Which big topics dominate the news?
+        (Fed/Rates, Inflation, AI/Technology, Geopolitics, etc.)
+        This tells you *why* the market is moving, not just *that* it's moving.
+
+        **Top Headlines** — The most bullish and bearish individual articles — the
+        specific stories driving the narrative today.
+
+        **Full Article Feed** — Browse all articles with filters by source and sentiment.
+        Every headline links directly to the original article.
+
+        ---
+
+        ### 🎯 Sentiment-Driven Stock Picks — The Killer Feature
+        After fetching news sentiment, scroll down to **"Identify Top Stocks & Options
+        from Sentiment"**. This feature:
+
+        1. Identifies which macro themes are most bullish in today's news
+           (e.g. "AI / Technology sentiment is very positive")
+        2. Maps those themes to the stocks most likely to benefit
+           (e.g. NVDA, MSFT, AMD, GOOGL for AI)
+        3. Runs the full quant model on each candidate in parallel
+        4. Combines the quant score + a sentiment alignment bonus to rank picks
+        5. Returns the top N stocks with full analysis cards
+
+        **This is where fundamental analysis meets news intelligence** — a combination
+        used by the most sophisticated quantitative funds.
+
+        ---
+
+        ### 🐦 Reddit Retail Sentiment — What It Does
+        Scans discussions across **r/stocks, r/investing, r/wallstreetbets, r/finance,
+        r/economy** to measure what *retail investors* (everyday people) are talking about.
+
+        This matters because retail sentiment can be a **contrarian indicator** — when
+        Reddit is euphoric about a stock (e.g. GME in 2021), it's often near its peak.
+        Conversely, when retail is panicking and selling, institutions are often buying.
+
+        Shows: market sentiment score, ticker-level sentiment, most discussed stocks,
+        trending themes, and sample posts from the community.
+
+        ---
+
+        ### How to use the two signals together
+        | Scenario | What It Might Mean |
+        |----------|-------------------|
+        | News Bullish + Reddit Bullish | Strong momentum — broad agreement |
+        | News Bullish + Reddit Bearish | Professionals optimistic, retail fearful — possible contrarian buy |
+        | News Bearish + Reddit Bullish | Retail chasing, pros cautious — possible peak/caution signal |
+        | News Bearish + Reddit Bearish | Broad fear — possible bottom forming or continued decline |
+
+        > 💡 **Tip:** Run this tab first thing in the morning before making any trading
+        > decisions. The overall market tone here should inform how aggressively you
+        > act on signals from Tabs 1–4.
+        """)
 
     sent_t1, sent_t2 = st.tabs(["📡 Financial News Sentiment", "🐦 Reddit Retail Sentiment"])
 
