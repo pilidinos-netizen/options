@@ -1,13 +1,14 @@
 # engines/options_opportunity_engine.py
 
 import yfinance as yf
-from datetime import datetime
+
+from data.options_chain import get_options_chain
+from data.market_data import get_price_history
 
 
 def get_liquidity_score(ticker):
     try:
-        stock = yf.Ticker(ticker)
-        return stock.info.get("averageVolume", 0)
+        return yf.Ticker(ticker).info.get("averageVolume", 0)
     except Exception:
         return 0
 
@@ -21,97 +22,78 @@ def calculate_opportunity_score(confidence, volatility, liquidity):
 
 
 def select_best_option_contract(ticker, intent):
-    stock = yf.Ticker(ticker)
-    expirations = stock.options
+    calls, puts = get_options_chain(ticker)
 
-    if not expirations:
+    if calls is None or puts is None:
         return None
 
-    # Pick nearest expiration > 30 days
-    selected_exp = expirations[0]
-
-    chain = stock.option_chain(selected_exp)
-
-    current_price = stock.history(period="1d")["Close"].iloc[-1]
+    price_data = get_price_history(ticker, period="1d")
+    current_price = float(price_data["Close"].dropna().iloc[-1])
 
     if intent in ["STRONG BUY", "BUY"]:
-        calls = chain.calls
-        calls["distance"] = abs(calls["strike"] - current_price)
-        best = calls.sort_values("distance").iloc[0]
+        df = calls.copy()
     else:
-        puts = chain.puts
-        puts["distance"] = abs(puts["strike"] - current_price)
-        best = puts.sort_values("distance").iloc[0]
+        df = puts.copy()
 
-    strike = float(best["strike"])
+    df["distance"] = abs(df["strike"] - current_price)
+    best = df.sort_values("distance").iloc[0]
+
+    strike  = float(best["strike"])
     premium = float(best["lastPrice"])
 
     if intent in ["STRONG BUY", "BUY"]:
-        break_even = strike + premium
+        break_even    = strike + premium
         strategy_type = "Call Option"
     else:
-        break_even = strike - premium
+        break_even    = strike - premium
         strategy_type = "Put Option"
 
     return {
-        "Expiration": selected_exp,
-        "Strike": strike,
-        "Premium": premium,
-        "Break Even": round(break_even, 2),
-        "Strategy Type": strategy_type
+        "Expiration":    best.get("expiration", "N/A"),
+        "Strike":        strike,
+        "Premium":       premium,
+        "Break Even":    round(break_even, 2),
+        "Strategy Type": strategy_type,
     }
 
 
 def rank_option_opportunities(tickers, run_model, profile):
-
     opportunities = []
 
     for ticker in tickers:
-
         try:
-            result = run_model(ticker, profile)
-
+            result     = run_model(ticker, profile)
             confidence = result["Confidence"]
             volatility = result["Volatility"]
-            intent = result["Intent"]
-            liquidity = get_liquidity_score(ticker)
-
-            score = calculate_opportunity_score(
-                confidence,
-                volatility,
-                liquidity
-            )
-
-            contract = select_best_option_contract(ticker, intent)
+            intent     = result["Intent"]
+            liquidity  = get_liquidity_score(ticker)
+            score      = calculate_opportunity_score(confidence, volatility, liquidity)
+            contract   = select_best_option_contract(ticker, intent)
 
             if not contract:
                 continue
 
-            reasoning = (
+            reasoning = result.get("Reasoning", (
                 f"{intent} signal with confidence {confidence}. "
-                f"Volatility at {round(volatility,3)} supports options activity."
-            )
+                f"Volatility at {round(volatility, 3)} supports options activity."
+            ))
 
             opportunities.append({
-                "Ticker": ticker,
-                "Intent": intent,
-                "Confidence": confidence,
-                "Volatility": round(volatility, 3),
-                "Liquidity": liquidity,
+                "Ticker":           ticker,
+                "Intent":           intent,
+                "Confidence":       confidence,
+                "Volatility":       round(volatility, 3),
+                "Liquidity":        liquidity,
                 "Opportunity Score": round(score, 2),
-                "Strategy": contract["Strategy Type"],
-                "Strike Price": contract["Strike"],
-                "Expiration Date": contract["Expiration"],
-                "Premium (Cost)": contract["Premium"],
+                "Strategy":         contract["Strategy Type"],
+                "Strike Price":     contract["Strike"],
+                "Expiration Date":  contract["Expiration"],
+                "Premium (Cost)":   contract["Premium"],
                 "Break Even Price": contract["Break Even"],
-                "Reasoning": reasoning
+                "Reasoning":        reasoning,
             })
 
         except Exception:
             continue
 
-    return sorted(
-        opportunities,
-        key=lambda x: x["Opportunity Score"],
-        reverse=True
-    )[:10]
+    return sorted(opportunities, key=lambda x: x["Opportunity Score"], reverse=True)[:10]

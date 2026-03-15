@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from data.fundamentals import get_fundamentals
 from data.market_data import get_price_history
 
-from engines.factor_engine import compute_scores
+from engines.factor_engine import compute_scores, build_reasoning
 from engines.intent_classifier import classify_intent
 from engines.regime_engine import detect_regime
 from engines.options_selector import select_options_strategy
@@ -29,6 +29,8 @@ def run_quant_model(ticker, risk_profile):
     # 1️⃣ Fundamentals
     # --------------------------------------
     info = get_fundamentals(ticker)
+    if not info:
+        raise ValueError(f"Could not retrieve fundamentals for {ticker}.")
 
     # --------------------------------------
     # 2️⃣ Multi-factor scoring
@@ -44,7 +46,7 @@ def run_quant_model(ticker, risk_profile):
     # --------------------------------------
     # 4️⃣ Intent classification
     # --------------------------------------
-    intent, confidence = classify_intent(weighted_score, volatility)
+    intent, confidence = classify_intent(weighted_score, volatility, risk_profile)
 
     # --------------------------------------
     # 5️⃣ Regime
@@ -64,7 +66,7 @@ def run_quant_model(ticker, risk_profile):
     # --------------------------------------
     # 8️⃣ Risk adjustment
     # --------------------------------------
-    allocation, risk_flag = risk_management(volatility, allocation)
+    allocation, risk_flag = risk_management(volatility, allocation, risk_profile)
 
     # --------------------------------------
     # 9️⃣ Current Price (Hardened Extraction)
@@ -92,6 +94,11 @@ def run_quant_model(ticker, risk_profile):
     # --------------------------------------
     timing = timing_plan()
 
+    # --------------------------------------
+    # 1️⃣2️⃣ Detailed Reasoning
+    # --------------------------------------
+    reasoning = build_reasoning(ticker, info, scores, intent, volatility, confidence)
+
     return {
         "Ticker": ticker.upper(),
         "Intent": intent,
@@ -103,7 +110,8 @@ def run_quant_model(ticker, risk_profile):
         "Risk Flag": risk_flag,
         "Monte Carlo Projection (1Y)": round(mc_projection, 2),
         "Timing Plan": timing,
-        "Factor Scores": scores
+        "Factor Scores": scores,
+        "Reasoning": reasoning,
     }
 
 

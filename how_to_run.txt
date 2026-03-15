@@ -7,4 +7,4 @@ python -m textblob.download_corpora
 
 python main.py
 
-streamlit run dashboard/app.py
+streamlit run app.py

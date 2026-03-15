@@ -5,7 +5,12 @@ RISK_PROFILES = {
     "Speculator": 0.30
 }
 
+# Weights must sum to 1.0 — all six factors are now explicit
 FACTOR_WEIGHTS = {
-    "growth": 0.6,
-    "profitability": 0.4
+    "growth":        0.25,
+    "profitability": 0.20,
+    "efficiency":    0.20,
+    "leverage":      0.15,
+    "roe":           0.10,
+    "valuation":     0.10,
 }

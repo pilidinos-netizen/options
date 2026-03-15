@@ -1,9 +1,6 @@
-import yfinance as yf
+from data.options_chain import get_options_chain
 
-def get_options_chain(ticker):
-    stock = yf.Ticker(ticker)
-    expirations = stock.options
-    if not expirations:
-        return None
-    chain = stock.option_chain(expirations[0])
-    return chain.calls, chain.puts
+
+def get_options_chain_for_volatility(ticker):
+    """Thin wrapper — kept for backward compatibility."""
+    return get_options_chain(ticker)

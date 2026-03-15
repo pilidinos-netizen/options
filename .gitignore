@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Secrets — never commit real keys
+.env
+.env.*
+secrets.toml
+
+# Streamlit local secrets
+.streamlit/secrets.toml
+
+# Cache files (options data cache)
+storage/cache/
+*.pkl
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
